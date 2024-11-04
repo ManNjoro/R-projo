@@ -14,7 +14,7 @@ unique(What.is.your.course.)
 df <- df[, 2:length(df)]
 View(sort(table(What.is.your.course.), decreasing = TRUE))
 barplot(sort(table(What.is.your.course.), decreasing = TRUE))
-View(df[is.na(Age),])
+View(df[is.na(df$age),])
 # Install necessary packages
 # install.packages("tidyverse")
 library("tidyverse")
@@ -22,7 +22,7 @@ library("tidyverse")
 # Get the median of Age
 ageMid = median(Age, na.rm=TRUE)
 ageMid
-df <- df %>% mutate(Age = replace_na(Age, ageMid))
+df <- df %>% mutate(age = replace_na(age, ageMid))
 # Check for duplicates
 df[duplicated(df),]
 # rename columns
@@ -36,7 +36,7 @@ df %>%
   summarise(Youngest = min(age),
             Average = round(mean(age), 1),
             Oldest = max(age),
-            Number = n()) %>% 
+            Count = n()) %>% 
   arrange(Average) %>% 
   View()
 names(df)
@@ -51,3 +51,60 @@ df$year.of.study<- sapply(df$year.of.study, function(row) {
   return(numerical_val)
 })
 View(df)
+#cleaning course column
+df$course <- sapply(df$course, function(row){
+  lowercs <- tolower(row)
+  trimmed_str <- trimws(lowercs)
+  return(trimmed_str)
+})
+unique(df$course)
+# Custom dictionary of mappings
+course_mapping <- c(
+  "engineering" = "Engineering",
+  "engine" = "Engineering",
+  "engin" = "Engineering",
+  "mathemathics" = "Mathematics",
+  "bit" = "Information Technology",
+  "it" = "Information Technology",
+  "bcs" = "Bachelor of Computer Science",
+  "human resources" = "Human Resources",
+  "irkhs" = "Islamic Knowledge and Human Sciences",
+  "kenms" = "Kulliyyah of Economics and Management Sciences",
+  "kirkhs" = "Kulliyyah of Islamic Revealed Knowledge and Human Sciences",
+  "benl" = "Bachelor of English Language and Literature",
+  "malcom" = "Malaysian Communication",
+  "kop" = "Kulliyyah of Pharmacy",
+  "usuluddin" = "Islamic Theology",
+  "pendidikan islam" = "Islamic Education",
+  "business administration" = "Business Administration",
+  "law" = "Law",
+  "laws" = "Law",
+  "taasl" = "Teaching Arabic as a Second Language",
+  "cts" = "Computer and Telecommunications Science",
+  "biomedical science" = "Biomedical Science",
+  "banking studies" = "Banking Studies",
+  "econs" = "Economics",
+  "human sciences" = "Human Sciences",
+  "biotechnology" = "Biotechnology",
+  "communication" = "Communication",
+  "diploma nursing" = "Nursing",
+  "fiqh" = "Islamic Jurisprudence",
+  "fiqh fatwa" = "Islamic Jurisprudence and Fatwa",
+  "enm" = "Environmental Management",       # or "Energy Management"
+  "koe" = "Kulliyyah of Engineering",
+  "ala" = "Arabic Language and Literature",
+  "mhsc" = "Medical and Health Sciences",
+  "diploma tesl" = "Diploma in Teaching English as a Second Language"
+)
+
+# Apply the mapping to the `course` column
+df$course <- tolower(df$course)  # convert to lowercase
+df$course <- recode(df$course, !!!course_mapping)  # apply mapping
+
+# Confirm the unique values after cleaning
+unique(df$course)
+summary(df$age)
+df$Age <- NULL
+View(df)
+median(c(3.00, 3.50))
+unique(df$Do.you.have.Depression.)
