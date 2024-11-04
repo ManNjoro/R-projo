@@ -9,7 +9,7 @@ attach(df)
 hist(Age)
 class(Your.current.year.of.Study)
 unique(What.is.your.course.)
-df <- df[, 2:11]
+df <- df[, 2:length(df)]
 View(sort(table(What.is.your.course.), decreasing = TRUE))
 barplot(sort(table(What.is.your.course.), decreasing = TRUE))
 View(df[is.na(Age),])
@@ -28,3 +28,13 @@ df <- df %>%
   select(everything()) %>% 
   rename(gender = Choose.your.gender, course=What.is.your.course., age = Age,
          "year of study" = Your.current.year.of.Study, CGPA = What.is.your.CGPA.)
+View(df)
+df %>% 
+  group_by(course) %>% 
+  summarise(Youngest = min(age),
+            Average = round(mean(age), 1),
+            Oldest = max(age),
+            Number = n()) %>% 
+  arrange(Average) %>% 
+  View()
+names(df)
