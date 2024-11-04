@@ -125,3 +125,10 @@ df$CGPA <- sapply(df$CGPA, calculate_median)
 print(df$CGPA)
 
 View(df)
+write.csv(df, "Student Mental health cleaned.csv", row.names = FALSE)
+df %>% 
+  select(course, Do.you.have.Depression., Do.you.have.Anxiety., Do.you.have.Panic.attack., Did.you.seek.any.specialist.for.a.treatment.) %>% 
+  View()
+ggplot(data = df,
+       mapping= aes(x = course))+
+  geom_bar()
