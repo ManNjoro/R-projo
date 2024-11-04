@@ -108,3 +108,20 @@ df$Age <- NULL
 View(df)
 median(c(3.00, 3.50))
 unique(df$Do.you.have.Depression.)
+df$CGPA
+# Define a function to calculate the median of each range
+calculate_median <- function(range) {
+  # Split the range into two numbers
+  nums <- as.numeric(unlist(strsplit(range, " - ")))
+  # Calculate the median
+  median_value <- round(median(nums), 2)
+  return(median_value)
+}
+
+# Apply the function to each row in the CGPA column
+df$CGPA <- sapply(df$CGPA, calculate_median)
+
+# View the cleaned CGPA column
+print(df$CGPA)
+
+View(df)
