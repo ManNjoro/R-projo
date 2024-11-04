@@ -1,7 +1,9 @@
 # getwd()
 # setwd("D:/R-projo")
 df <- read.csv("Student Mental health.csv")
-df
+# remove Timestamp column
+df$Timestamp <- NULL
+View(df)
 dim(df)
 str(df)
 summary(df)
@@ -27,7 +29,7 @@ df[duplicated(df),]
 df <- df %>% 
   select(everything()) %>% 
   rename(gender = Choose.your.gender, course=What.is.your.course., age = Age,
-         "year of study" = Your.current.year.of.Study, CGPA = What.is.your.CGPA.)
+         year.of.study = Your.current.year.of.Study, CGPA = What.is.your.CGPA.)
 View(df)
 df %>% 
   group_by(course) %>% 
@@ -38,3 +40,14 @@ df %>%
   arrange(Average) %>% 
   View()
 names(df)
+library('dplyr')
+# clean year of study column
+df$year.of.study<- sapply(df$year.of.study, function(row) {
+  # Convert to lowercase first
+  lowercs <- tolower(row)
+  # Extract numerical value
+  numerical_val <- strsplit(lowercs," ")[[1]][2]
+  
+  return(numerical_val)
+})
+View(df)
