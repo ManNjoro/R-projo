@@ -31,14 +31,13 @@ df <- df %>%
   rename(gender = Choose.your.gender, course=What.is.your.course., age = Age,
          year.of.study = Your.current.year.of.Study, CGPA = What.is.your.CGPA.)
 View(df)
-df %>% 
+grouped_course <- df %>% 
   group_by(course) %>% 
   summarise(Youngest = min(age),
             Average = round(mean(age), 1),
             Oldest = max(age),
             Count = n()) %>% 
-  arrange(Average) %>% 
-  View()
+  arrange(-Count)
 names(df)
 library('dplyr')
 # clean year of study column
@@ -130,5 +129,43 @@ df %>%
   select(course, Do.you.have.Depression., Do.you.have.Anxiety., Do.you.have.Panic.attack., Did.you.seek.any.specialist.for.a.treatment.) %>% 
   View()
 ggplot(data = df,
-       mapping= aes(x = course))+
+       mapping= aes(x = gender, color = Do.you.have.Depression., fill = Do.you.have.Depression.))+
+  geom_bar()
+df %>% 
+  ggplot(aes(x = CGPA,
+             color = gender,
+             fill = gender))+
+  geom_density(alpha=1)+
+  theme_bw()
+
+#Add a Risk Level column
+df <- df %>% 
+  mutate(Risk.Level = case_when(Do.you.have.Depression. == "Yes" & Do.you.have.Anxiety. == "Yes" & Do.you.have.Panic.attack. == "Yes" ~ "High",
+                                (Do.you.have.Anxiety. == "Yes" & Do.you.have.Depression. == "Yes")| (Do.you.have.Anxiety. == "Yes" & Do.you.have.Panic.attack. == "Yes") | (Do.you.have.Depression. == "Yes"& Do.you.have.Panic.attack. == "Yes") ~ "Medium",
+                                .default = "Low"))
+ggplot(data = df,
+       mapping = aes(x = Risk.Level, color=gender, fill = gender))+
+  geom_bar()
+write.csv(df, "Student Mental health cleaned.csv", row.names = FALSE)
+
+df %>% 
+  select(Risk.Level, Did.you.seek.any.specialist.for.a.treatment.) %>% 
+  View()
+ggplot(data = df,
+       mapping = aes(x = Risk.Level, color=Did.you.seek.any.specialist.for.a.treatment., fill = Did.you.seek.any.specialist.for.a.treatment.))+
+  geom_bar()
+
+ggplot(data = df,
+       mapping = aes(x=year.of.study, y=age, color=Risk.Level))+
+  geom_point(size = 5, alpha = 0.5)+
+  theme_minimal()+
+  labs(title = "Year of study and Age by gender")
+View(grouped_course)
+grouped_course %>% 
+  filter(Count > 10) %>% 
+  View()
+
+df %>% 
+  filter(course %in% c("information technology", "engineering", "bachelor of computer science")) %>% 
+  ggplot(mapping = aes(x=course, color=gender, fill = gender))+
   geom_bar()
