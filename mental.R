@@ -184,3 +184,18 @@ df %>%
   summarise(CGPA = round(mean(CGPA), 2), Risk.Level = list(Risk.Level)) %>% 
   arrange(CGPA) %>% 
   View()
+
+
+ggplot(data = df, aes(x = Marital.status, fill = Risk.Level)) +
+  geom_bar(position = "dodge") +
+  facet_wrap(~ gender) +
+  labs(title = "Marital Status by Risk Level, Split by Gender",
+       x = "Marital Status",
+       y = "Number of students") +
+  theme_minimal()
+
+df %>% 
+  group_by(course, year.of.study) %>% 
+  summarise(CGPA = round(mean(CGPA), 2)) %>% 
+  arrange(year.of.study) %>% 
+  View()
