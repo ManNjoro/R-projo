@@ -167,5 +167,20 @@ grouped_course %>%
 
 df %>% 
   filter(course %in% c("information technology", "engineering", "bachelor of computer science")) %>% 
-  ggplot(mapping = aes(x=course, color=gender, fill = gender))+
+  ggplot(mapping = aes(x=course, color=Risk.Level, fill = Risk.Level))+
+  labs(title = "Number of students in a course and the Risk Level")+
   geom_bar()
+ggplot(data=df,
+       mapping = aes(x = Marital.status, color=Risk.Level, fill = Risk.Level))+
+  labs(title = "Marital status compared to Risk Level")+
+  geom_bar()
+ggplot(data=df,
+       mapping = aes(x = Marital.status, color=gender, fill = gender))+
+  labs(title = "Marital status compared to Gender")+
+  geom_bar()
+
+df %>% 
+  group_by(course) %>% 
+  summarise(CGPA = round(mean(CGPA), 2), Risk.Level = list(Risk.Level)) %>% 
+  arrange(CGPA) %>% 
+  View()
