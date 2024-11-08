@@ -15,3 +15,8 @@ fruits <- append(fruits,"mango")
 fruits[4] <- "strawberry"
 length(fruits)
 "grape" %in% fruits
+music_genre <- 
+  factor(c("Jazz", "Rock", "Classic", "Classic", "Pop", "Jazz", "Rock", "Jazz"),
+         levels = c("Classic", "Jazz", "Pop", "Rock", "Other"))
+levels(music_genre)
+music_genre
