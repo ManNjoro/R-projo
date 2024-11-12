@@ -1,6 +1,7 @@
 # getwd()
 # setwd("D:/R-projo")
 df <- read.csv("Student Mental health.csv")
+
 # remove Timestamp column
 df$Timestamp <- NULL
 View(df)
@@ -178,6 +179,10 @@ ggplot(data=df,
        mapping = aes(x = Marital.status, color=gender, fill = gender))+
   labs(title = "Marital status compared to Gender")+
   geom_bar()
+ggplot(data=df,
+       mapping = aes(x = CGPA, color=Risk.Level, fill = Risk.Level))+
+  labs(title = "CGPA compared to Risk Level")+
+  geom_bar()
 
 df %>% 
   group_by(course) %>% 
@@ -199,3 +204,8 @@ df %>%
   summarise(CGPA = round(mean(CGPA), 2)) %>% 
   arrange(year.of.study) %>% 
   View()
+hist(df$year.of.study, xlab = "year of study", main="Histogram of year of study", ylab="No of students")
+hist(df$CGPA, xlab = "CGPA", main="Histogram of CGPA", ylab="No of students")
+hist(df$age, xlab = "Age", main="Histogram of Age", ylab="No of students")
+unique(df$year.of.study)
+summary(df)
